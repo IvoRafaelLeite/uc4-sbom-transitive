@@ -1,0 +1,12 @@
+{
+  "name": "uc4-sbom-transitive",
+  "version": "1.0.0",
+  "description": "UC4 – SBOM Transitive Dependency Risk",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "4.16.0"
+  }
+}
