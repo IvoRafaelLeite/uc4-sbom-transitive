@@ -1,24 +1,29 @@
+name: wiz-sca-scan
 
 on:
   pull_request:
     branches: [ "main" ]
 
-permissions:
-  contents: read
-  pull-requests: write
-
 jobs:
-  wiz-code-scan:
+
+  sca-scan:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      - name: Run Wiz Code Scan (SCA / SBOM)
-        uses: wiz-sec/wiz-code@v1
-        with:
-          path: .
-        env:
-          WIZ_CLIENT_ID: ${{ secrets.WIZ_CLIENT_ID }}
-          WIZ_CLIENT_SECRET: ${{ secrets.WIZ_CLIENT_SECRET }}
+      - name: Download Wiz CLI
+        run: |
+          curl -o wizcli https://wizcli.app.wiz.io/wizcli
+          chmod +x wizcli
+
+      - name: Authenticate to Wiz
+        run: |
+          ./wizcli auth \
+            --id "${{ secrets.WIZ_CLIENT_ID }}" \
+            --secret "${{ secrets.WIZ_CLIENT_SECRET }}"
+
+
+      - name: Run Wiz SCA / SBOM scan
+        run: |
+              ./wizcli dir scan --path .
